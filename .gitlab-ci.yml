@@ -2,7 +2,7 @@ stages:
   - deploy
 
 variables:
-  HOST: "https://windowsloc-7738.rostiapp.cz/"
+  HOST: "ssh.rosti.cz"
   USER: "app"
   PORT: "13276"
   PHP_VERSION: "8.3.12"
