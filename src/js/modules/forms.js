@@ -36,7 +36,7 @@ const forms = (state) => {
                     formData.append(key, state[key]);
                 }
             }
-            const response = await postData('/src/assets/server.php', formData);
+            const response = await postData('./assets/server.php', formData);
             statusMessage.textContent = response ? message.success : message.failure;
 
             inputs.forEach(input => input.value = '')
