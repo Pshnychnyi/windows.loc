@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: windows.loc
+    build:
+      context: ./
+      dockerfile: docker/php-nginx/Dockerfile
+    hostname: windows.loc
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/app
+      - ./docker/php-nginx/nginx.conf:/etc/nginx/nginx.conf
+    restart: no
