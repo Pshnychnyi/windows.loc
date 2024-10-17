@@ -1,1 +1,1 @@
-# petrichenko-js-course-windowsasdasdasdasdad
+# petrichenko-js-course-windows
