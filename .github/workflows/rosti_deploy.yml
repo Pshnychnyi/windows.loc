@@ -1,0 +1,36 @@
+name: Deploy into Roští.cz
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HOST: ssh.rosti.cz
+      USER: app
+      PORT: 10897
+      PHP_VERSION: 8.3.12
+    steps:
+      - uses: actions/checkout@v3
+      - uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.ROSTI_DEPLOY_SSH_KEY }}
+      - name: Setup hostkey
+        run: |
+          echo "ssh.rosti.cz ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDP/z5nYKW4uv3YtdUMuZFee38l7qym3RmIPWdOdxzLdp1O/WwUQpEhspfh9rJkgFqA18nNB+/kYWJyWhYsOojUdBHD5lchUWQJS5WQpdTXqpyVf0G0ZZ7spqZSOxbCm4669NohB/OLFvr7agkCkiOYZ7ml2dWAE2aWToh5r3X33mFmH8q4cG3DGFzLAIC2o+aWx2kPUHKYPQYV0GWtU/wKjAaTrQb4emwAi9vd1gjp8a61ftOuO+76AEeVzmqFW0l+U5DOzFJv9akqYynp+keeFdTtJtg50v5twwOj0lx3525vlyDFi424tltEDyAEZErk0ONNajN1NzmrwET65Fwn" > ./known_hosts
+      - name: env
+        run: |
+          cat << EOF > .env
+          ${{ secrets.ENV }}
+          EOF
+      - name: Setup PHP
+        run: |
+          ssh -o UserKnownHostsFile=./known_hosts -p $PORT $USER@$HOST /usr/local/bin/rosti php $PHP_VERSION
+      - name: Copy code
+        run: |
+          rsync -ae "ssh -o UserKnownHostsFile=./known_hosts -p $PORT" --delete-after --exclude=.git ./ $USER@$HOST:/srv/app/
+      - name: Apply changes
+        run: |
+          ssh -o UserKnownHostsFile=./known_hosts -p $PORT $USER@$HOST supervisorctl restart app
