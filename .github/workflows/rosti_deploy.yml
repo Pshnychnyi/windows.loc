@@ -16,7 +16,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: webfactory/ssh-agent@v0.8.0
         with:
-          ssh-private-key: ${{ secrets.ROSTI_DEPLOY_SSH_KEY }}
+          ssh-private-key: |
+            ${{ secrets.ROSTI_DEPLOY_SSH_KEY }}
       - name: Setup hostkey
         run: |
           echo "ssh.rosti.cz ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDP/z5nYKW4uv3YtdUMuZFee38l7qym3RmIPWdOdxzLdp1O/WwUQpEhspfh9rJkgFqA18nNB+/kYWJyWhYsOojUdBHD5lchUWQJS5WQpdTXqpyVf0G0ZZ7spqZSOxbCm4669NohB/OLFvr7agkCkiOYZ7ml2dWAE2aWToh5r3X33mFmH8q4cG3DGFzLAIC2o+aWx2kPUHKYPQYV0GWtU/wKjAaTrQb4emwAi9vd1gjp8a61ftOuO+76AEeVzmqFW0l+U5DOzFJv9akqYynp+keeFdTtJtg50v5twwOj0lx3525vlyDFi424tltEDyAEZErk0ONNajN1NzmrwET65Fwn" > ./known_hosts
